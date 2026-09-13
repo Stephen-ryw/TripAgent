@@ -1,8 +1,9 @@
 import os
 import certifi
 from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
 
-load_dotenv
+load_dotenv()
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
 os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
@@ -22,8 +23,7 @@ from langchain_core.messages import (
     AIMessage,
     SystemMessage,
     
-)
-from langchain_groq import ChatGroq
+)from langchain_openai import ChatOpenAI
 from tools.tavily_tools import tavily_search
 from tools.flight_tools import search_flights
 
@@ -42,18 +42,19 @@ def get_database_url():
     return database_url
 
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY is missing. Please add it to your .env file.")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+if not OPENROUTER_API_KEY:
+    raise ValueError("OPENROUTER_API_KEY is missing. Please add it to your .env file.")
 
 
 # =========================
 # LLM
 # =========================
 
-llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    api_key=GROQ_API_KEY
+llm = ChatOpenAI(
+    model="openrouter/free",
+    openai_api_key=OPENROUTER_API_KEY,
+    openai_api_base="https://openrouter.ai/api/v1"
 )
 
 
